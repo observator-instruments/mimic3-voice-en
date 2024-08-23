@@ -17,7 +17,7 @@ jobs:
         run: cat mycroft.tar.gz.* | tar -xzvf -
 
       - name: Create ZIP file
-        run: zip -r mimic3-en-voice.zip .
+        run: zip -r mimic3-en-voice.zip mycroft/
 
       - name: Create GitHub Release
         id: create_release
