@@ -18,8 +18,8 @@ jobs:
       - name: Assemble output
         run: cat mycroft.tar.gz.* | tar -xzvf -
 
-      - name: Create ZIP file
-        run: zip -r mimic3-en-voice.zip mycroft/
+      - name: Create tar.gz file
+        run: tar -czvf mimic3-en-voice.tar.gz mycroft/
 
       - name: Create GitHub Release
         id: create_release
@@ -38,6 +38,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./mimic3-en-voice.zip
-          asset_name: mimic3-en-voice.zip
-          asset_content_type: application/zip
+          asset_path: ./mimic3-en-voice.tar.gz
+          asset_name: mimic3-en-voice.tar.gz
+          asset_content_type: application/gzip
