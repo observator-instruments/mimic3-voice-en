@@ -1,0 +1,39 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Triggers the workflow on tag push (e.g., v1.0.0)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Assemble output
+        run: cat mycroft.tar.gz.* | tar -xzvf -
+
+      - name: Create ZIP file
+        run: zip -r mimic3-en-voice.zip .
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./mimic3-en-voice.zip
+          asset_name: mimic3-en-voice.zip
+          asset_content_type: application/zip
