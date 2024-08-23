@@ -5,6 +5,8 @@ on:
     tags:
       - 'v*.*.*'  # Triggers the workflow on tag push (e.g., v1.0.0)
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -21,7 +23,7 @@ jobs:
 
       - name: Create GitHub Release
         id: create_release
-        uses: actions/create-release@v1.1.4
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -31,7 +33,9 @@ jobs:
           prerelease: false
 
       - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1.0.2
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./mimic3-en-voice.zip
